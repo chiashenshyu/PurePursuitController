@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __MATPlOT_H__
+#define __MATPlOT_H__
 
 #include <vector>
 #include <map>
@@ -579,7 +580,7 @@ bool hist(const std::vector<Numeric>& y, long bins=10,std::string color="b",
 
 #ifndef WITHOUT_NUMPY
     namespace internal {
-        void imshow(void *ptr, const NPY_TYPES type, const int rows, const int columns, const int colors, const std::map<std::string, std::string> &keywords)
+        inline void imshow(void *ptr, const NPY_TYPES type, const int rows, const int columns, const int colors, const std::map<std::string, std::string> &keywords)
         {
             assert(type == NPY_UINT8 || type == NPY_FLOAT);
             assert(colors == 1 || colors == 3 || colors == 4);
@@ -607,12 +608,12 @@ bool hist(const std::vector<Numeric>& y, long bins=10,std::string color="b",
         }
     }
 
-    void imshow(const unsigned char *ptr, const int rows, const int columns, const int colors, const std::map<std::string, std::string> &keywords = {})
+    inline void imshow(const unsigned char *ptr, const int rows, const int columns, const int colors, const std::map<std::string, std::string> &keywords = {})
     {
         internal::imshow((void *) ptr, NPY_UINT8, rows, columns, colors, keywords);
     }
 
-    void imshow(const float *ptr, const int rows, const int columns, const int colors, const std::map<std::string, std::string> &keywords = {})
+    inline void imshow(const float *ptr, const int rows, const int columns, const int colors, const std::map<std::string, std::string> &keywords = {})
     {
         internal::imshow((void *) ptr, NPY_FLOAT, rows, columns, colors, keywords);
     }
@@ -1867,3 +1868,5 @@ private:
 };
 
 } // end namespace matplotlibcpp
+
+#endif

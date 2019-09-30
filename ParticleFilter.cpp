@@ -1,11 +1,9 @@
-#include "ParticleFilter.h"
+#include "ParticleFilter.hpp"
 
 int ParticleFilter::m_cov = 100;
 
-ParticleFilter::ParticleFilter(const int& numOfParticles,
-                               const double& lmx,
-                               const double& lmy)
-:particlesArrSize(numOfParticles), limX(lmx), limY(lmy)
+ParticleFilter::ParticleFilter(const int& numOfParticles)
+:particlesArrSize(numOfParticles)
 {
     init = false; 
     iter = 1;
@@ -25,8 +23,8 @@ void ParticleFilter::calAverage(double& x, double& y){
 
 void ParticleFilter::priorUpdate(const state& n, const std::vector<double>& param){
     std::default_random_engine generator;
-    std::normal_distribution<double> distributionX(limX, 10), distributionY(limY, 10); // (center, std)
-    if(!init){
+    std::normal_distribution<double> distributionX(n.x, 10), distributionY(n.y, 10); // (center, std)
+    if(!init || param.empty()){
         init = true;
         for(int i = 0; i < particlesArrSize; i++){
             state a = n;  

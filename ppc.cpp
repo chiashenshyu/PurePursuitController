@@ -146,13 +146,15 @@ std::pair<double,int> ppc::purePursuitControl(const path&  p,
     return res; 
 }
 
-int ppc::implementPPC(const path& p, const double& targetSpeed, int currentIndex){
+std::vector<double> ppc::implementPPC(const path& p, const double& targetSpeed, int currentIndex){
     int targetIndex = (oldNearestPointIndex < 0)? calTargetIndex(st, p) : currentIndex; 
     double ai = PIDControl(targetSpeed, st.v); 
     std::pair<double,int> pr = purePursuitControl(p, targetIndex);
     targetIndex = pr.second; 
     st.update(ai, pr.first, dt, L); 
-    return targetIndex;
+    std::cout << pr.second << " " << ai << " " << pr.first << " " << dt << " " << L << std::endl;
+    std::vector<double> ret = {static_cast<double>(pr.second), ai, pr.first, dt, L};
+    return ret;
 }
 
 // int main(){
@@ -184,7 +186,8 @@ int ppc::implementPPC(const path& p, const double& targetSpeed, int currentIndex
 //     std::vector<double> t = {0.0};
 
 //     while(T >= time && lastIndex > currentIndex){
-//         currentIndex = car.implementPPC(p, targetSpeed, currentIndex);
+//         std::pair<double, int> pr = car.implementPPC(p, targetSpeed, currentIndex);
+//         currentIndex = pr.second; 
 //         time += car.dt;
 //         x.push_back(car.st.x);
 //         y.push_back(car.st.y);

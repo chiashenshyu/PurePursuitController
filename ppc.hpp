@@ -20,7 +20,7 @@ public:
     double dt;
 
     ppc(double x, double y, double theta, double v); 
-    int implementPPC(const path& p, const double& targetSpeed, int currentIndex);
+    std::vector<double> implementPPC(const path& p, const double& targetSpeed, int currentIndex);
 private:
     static double k; 
     static double Lfc; 

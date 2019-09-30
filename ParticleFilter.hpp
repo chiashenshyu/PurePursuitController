@@ -22,9 +22,7 @@ private:
     
 public:
 
-    ParticleFilter(const int& numOfParticles = 1000,
-                   const double& lmx = 50.0, 
-                   const double& lmy = 50.0);
+    ParticleFilter(const int& numOfParticles);
     void calAverage(double& x, double& y);
     void priorUpdate(const state& n, const std::vector<double>& param);
     void assignWeight(const state& n);
