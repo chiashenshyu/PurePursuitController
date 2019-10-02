@@ -22,6 +22,14 @@ struct state{
     double rearX; 
     double rearY; 
     state(){}; 
+    state(const state& st){
+        x = st.x; 
+        y = st.y; 
+        theta = st.theta; 
+        v = st.v; 
+        rearX = st.rearX; 
+        rearY = st.rearY; 
+    }
     void NoiseState(const state& st, const double& nx, const double& ny){
         x = st.x + nx; 
         y = st.y + ny; 

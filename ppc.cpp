@@ -55,7 +55,7 @@ ppc::ppc(double x, double y, double theta, double v){
     st.rearY = y - (L/2)*sin(theta); 
 }
 
-double ppc::calDistance(const state& st, const double x, const double y) const{
+double ppc::calDistance(const States& st, const double x, const double y) const{
     double dx = st.rearX - x; 
     double dy = st.rearY - y;
     return sqrt(pow(dx,2)+pow(dy,2)); 
@@ -76,7 +76,7 @@ double ppc::PIDControl(double target, double current) const{
     return a; 
 }
 
-int ppc::calTargetIndex(const state& st, const path& p){
+int ppc::calTargetIndex(const States& st, const Path& p){
     int res; 
 
     if(oldNearestPointIndex == -1){
@@ -120,7 +120,7 @@ int ppc::calTargetIndex(const state& st, const path& p){
     return res; 
 }
 
-std::pair<double,int> ppc::purePursuitControl(const path&  p,
+std::pair<double,int> ppc::purePursuitControl(const Path&  p,
                                               int pIndex){
     int index = calTargetIndex(st, p);
     double tx, ty; 
@@ -146,13 +146,25 @@ std::pair<double,int> ppc::purePursuitControl(const path&  p,
     return res; 
 }
 
-std::vector<double> ppc::implementPPC(const path& p, const double& targetSpeed, int currentIndex){
+std::vector<double> ppc::implementPPC(const Path& p, const double& targetSpeed, int currentIndex){
     int targetIndex = (oldNearestPointIndex < 0)? calTargetIndex(st, p) : currentIndex; 
     double ai = PIDControl(targetSpeed, st.v); 
     std::pair<double,int> pr = purePursuitControl(p, targetIndex);
     targetIndex = pr.second; 
     st.update(ai, pr.first, dt, L); 
-    std::cout << pr.second << " " << ai << " " << pr.first << " " << dt << " " << L << std::endl;
+    std::vector<double> ret = {static_cast<double>(pr.second), ai, pr.first, dt, L};
+    return ret;
+}
+
+std::vector<double> ppc::implementPPCWoLoc(const Path& p, const double& targetSpeed, 
+                                           int currentIndex, double measX, double measY){
+    double x = st.x, y = st.y; 
+    st.x = measX; st.y = measY; 
+    int targetIndex = (oldNearestPointIndex < 0)? calTargetIndex(st, p) : currentIndex; 
+    double ai = PIDControl(targetSpeed, st.v); 
+    std::pair<double,int> pr = purePursuitControl(p, targetIndex);
+    targetIndex = pr.second; 
+    st.update(ai, pr.first, dt, L); 
     std::vector<double> ret = {static_cast<double>(pr.second), ai, pr.first, dt, L};
     return ret;
 }
@@ -164,7 +176,7 @@ std::vector<double> ppc::implementPPC(const path& p, const double& targetSpeed, 
 //         cx.push_back(i); 
 //         cy.push_back(cos(cx.back() / 5.0) * cx.back() / 2.0); 
 //     }
-//     path p; 
+//     Path p; 
 //     p.cx = cx;
 //     p.cy = cy;
     

@@ -21,24 +21,25 @@ void ParticleFilter::calAverage(double& x, double& y){
     y = y_tot / particlesArr.size(); 
 }
 
-void ParticleFilter::priorUpdate(const state& n, const std::vector<double>& param){
-    std::default_random_engine generator;
-    std::normal_distribution<double> distributionX(n.x, 10), distributionY(n.y, 10); // (center, std)
+void ParticleFilter::priorUpdate(const States& n, const std::vector<double>& param){
+    std::default_random_engine generator(time(0));
+    std::normal_distribution<double> distributionX(0, 10), distributionY(0, 10); // (center, std)
     if(!init || param.empty()){
         init = true;
         for(int i = 0; i < particlesArrSize; i++){
-            state a = n;  
+            States a = n;
             a.NoiseState(n, distributionX(generator), distributionY(generator));
-            particlesArr.push_back(a); 
+            particlesArr[i] = a; 
         }
     }else{
+        iter = 0; 
         for(auto& p : particlesArr){
             p.update(param[0], param[1], param[2], param[3]);
         }
     }
 }
 
-void ParticleFilter::assignWeight(const state& car)
+void ParticleFilter::assignWeight(const States& car)
 {
     totalWeight = 0; 
     double x1 = car.x, y1 = car.y, x2, y2, delta; 
@@ -56,8 +57,7 @@ void ParticleFilter::resample()
     std::default_random_engine generator(time(0)); 
     std::uniform_real_distribution<double> distribution(0.0, totalWeight);
     std::normal_distribution<double> d(0.0,1.0);
-    std::vector<state> tmp;
-    // cout << "weight" << m_totalWeight << endl; 
+    std::vector<States> tmp;
     for(int i = 0; i < particlesArrSize; i++){
         double threshold = distribution(generator);
         double accu = 0; 
@@ -65,7 +65,7 @@ void ParticleFilter::resample()
         while(accu < threshold){
             accu += weightArr[iter++];
         }
-        state _p = (iter != 0)? particlesArr[--iter] : particlesArr[iter];
+        States _p = (iter != 0)? particlesArr[--iter] : particlesArr[iter];
         _p.setNoise(d(generator), d(generator));
         tmp.push_back(_p);
     }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "incl.hpp"
+#include "common.hpp"
 // #include "model.h"
 
 
@@ -17,15 +17,15 @@ private:
     double limX; 
     double limY; 
     double totalWeight;
-    std::vector<state>   particlesArr;   
+    std::vector<States>   particlesArr;   
     std::vector<double>  weightArr; 
     
 public:
 
     ParticleFilter(const int& numOfParticles);
     void calAverage(double& x, double& y);
-    void priorUpdate(const state& n, const std::vector<double>& param);
-    void assignWeight(const state& n);
+    void priorUpdate(const States& n, const std::vector<double>& param);
+    void assignWeight(const States& n);
     void resample();
     // vector<float> implement();
     // int getStep() const; 

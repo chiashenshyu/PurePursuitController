@@ -1,5 +1,5 @@
 #pragma once
-#include "incl.hpp"
+#include "common.hpp"
 
 #define MATLIBPLOT
 #ifdef MATLIBPLOT
@@ -16,11 +16,13 @@ namespace plt = matplotlibcpp;
 class ppc{
 public:
     
-    state st;
+    States st;
     double dt;
 
     ppc(double x, double y, double theta, double v); 
-    std::vector<double> implementPPC(const path& p, const double& targetSpeed, int currentIndex);
+    std::vector<double> implementPPC(const Path& p, const double& targetSpeed, int currentIndex);
+    std::vector<double> implementPPCWoLoc(const Path& p, const double& targetSpeed, 
+                                          int currentIndex, double measX, double measY);
 private:
     static double k; 
     static double Lfc; 
@@ -30,10 +32,10 @@ private:
     int oldNearestPointIndex; 
      
 
-    double calDistance(const state& st, double x, double y) const; 
+    double calDistance(const States& st, double x, double y) const; 
     double PIDControl(double target, double current) const;
-    int calTargetIndex(const state& st, const path& p); 
-    std::pair<double,int> purePursuitControl(const path&  p, 
+    int calTargetIndex(const States& st, const Path& p); 
+    std::pair<double,int> purePursuitControl(const Path&  p, 
                                              int pIndex);
 
 };
