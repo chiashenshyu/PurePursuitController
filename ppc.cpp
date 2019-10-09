@@ -131,7 +131,7 @@ std::pair<double,int> ppc::purePursuitControl(const Path&  p,
         ty = p.cy[index]; 
     }else{
         tx = p.cx.back(); 
-        ty = p.cy               .back(); 
+        ty = p.cy.back(); 
         index = p.cx.size()-1; 
     }
 

@@ -38,8 +38,8 @@ int main(){
         
         std::default_random_engine generator(time(0));
         std::normal_distribution<double> distributionX(0, 0.5), distributionY(0, 0.5);
-        double xMeas = carWoLoc.st.x; /* + distributionX(generator);*/
-        double yMeas = carWoLoc.st.y; /* + distributionY(generator);*/
+        double xMeas = carWoLoc.st.x + distributionX(generator);; /**/
+        double yMeas = carWoLoc.st.y + distributionY(generator);; /**/
         std::vector<double> retWoLoc = carWoLoc.implementPPCWoLoc(p, targetSpeed, currentIndexWoLoc, xMeas, yMeas); 
 
         currentIndex = ret[0];
