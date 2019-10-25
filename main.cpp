@@ -37,7 +37,7 @@ int main(){
         std::vector<double> ret = car.implementPPC(p, targetSpeed, currentIndex); 
         
         std::default_random_engine generator(time(0));
-        std::normal_distribution<double> distributionX(0, 0.5), distributionY(0, 0.5);
+        std::normal_distribution<double> distributionX(0, 0.2), distributionY(0, 0.2);
         double xMeas = carWoLoc.st.x + distributionX(generator);; /**/
         double yMeas = carWoLoc.st.y + distributionY(generator);; /**/
         std::vector<double> retWoLoc = carWoLoc.implementPPCWoLoc(p, targetSpeed, currentIndexWoLoc, xMeas, yMeas); 
@@ -49,7 +49,7 @@ int main(){
         std::vector<double> param(ret.begin()+1, ret.begin()+5);
         double mx, my; 
         pf.priorUpdate(car.st, param); 
-        pf.calAverage(mx, my); 
+        // pf.calAverage(mx, my); 
         pf.assignWeight(car.st);
         pf.resample();
         
